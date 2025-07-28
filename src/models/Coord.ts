@@ -1,13 +1,18 @@
-import mongoose, { Schema } from 'mongoose'
+import mongoose from '../db/conn'
+import { Schema } from 'mongoose'
 
 const Coord = mongoose.model(
     'Coordinates',
     new Schema ({
-        coordX: {
+        id: {
+        type: Number,
+        required: true
+        },
+        x: {
             type: [Number, String],
             required: true,
         },
-        coordY: {
+        y: {
             type: [Number, String],
             required: true,
         },
