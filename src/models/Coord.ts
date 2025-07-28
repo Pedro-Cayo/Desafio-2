@@ -9,11 +9,11 @@ const Coord = mongoose.model(
         required: true
         },
         x: {
-            type: [Number, String],
+            type: Number,
             required: true,
         },
         y: {
-            type: [Number, String],
+            type: Number,
             required: true,
         },
     },
