@@ -1,17 +1,21 @@
 //TypeScript Express
-import { Request, Response } from 'express';
-type ExpressType = (req: Request, res: Response) => void
+import express from 'express'
+import CoordRoutes from './routes/CoordRoutes'
 //-----------------------
-const express = require('express')
 const app = express()
-const port = 3000
 
-const routes: ExpressType =(req, res) => {
-  res.send("Hello World!")
-}
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+)
+app.use(express.json())
 
-app.get('/', routes);
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+});
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+//Routes
+app.use('/pontos', CoordRoutes)
+
+app.listen(3000)

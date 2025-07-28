@@ -20,8 +20,10 @@
   "homepage": "https://github.com/Pedro-Cayo/Desafio-2#readme",
   "dependencies": {
     "@types/express": "^5.0.3",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^24.1.0",
     "express": "^5.1.0",
+    "express-validator": "^7.2.1",
     "mongodb": "^6.18.0",
     "mongoose": "^8.16.5",
     "nodemon": "^3.1.10",
