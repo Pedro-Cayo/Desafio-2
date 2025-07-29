@@ -1,9 +1,10 @@
 import mongoose from '../db/conn'
 import { Schema } from 'mongoose'
 
-const Coord = mongoose.model(
-    'Coordinates',
-    new Schema ({
+const CoordSchema = new Schema (
+    {
+    Coordinates: [
+        {
         id: {
         type: Number,
         required: true
@@ -16,9 +17,10 @@ const Coord = mongoose.model(
             type: Number,
             required: true,
         },
-    },
-    { timestamps: true},
-)
+        }
+    ]      
+    },{ timestamps: true},
 )
 
+const Coord = mongoose.model('Coordinates', CoordSchema)
 export default Coord

@@ -13,16 +13,16 @@ export default class CoordController {
         // Validações de Valores Númericos
         for(const coord of info){
             if (typeof coord.x !== 'number' || isNaN(coord.x)) {
-                res.status(422).json({ message: 'O valor de x deve ser númerico.'})
+                return res.status(422).json({ message: `Os valores de x devem ser númericos. O erro está no objeto de id ${coord.id}`})
               }
             if (typeof coord.y !== 'number' || isNaN(coord.y)) {
-                res.status(422).json({ message: 'O valor de y deve ser númerico.' })
+               return res.status(422).json({ message: `Os valores de y devem ser númericos. O erro está no objeto de id ${coord.id}` })
               }
             if (typeof coord.id !== 'number' || isNaN(coord.id)) {
-                res.status(422).json({ message: 'O valor do id deve ser númerico.' })
+              return res.status(422).json({ message: `Os valores do id devem ser númericos. O erro está no objeto de id ${coord.id}` })
               }
             if (!coord.x || !coord.y) {
-                return res.status(422).json({ message: 'Todos os pontos devem possuir as coordenadas x e y.' })
+                return res.status(422).json({ message: `Todos os pontos devem possuir as coordenadas x e y. O erro está no objeto de id ${coord.id}` })
               }
         // Validações de pares de coordenadas ou Id's iguais 
             const equalPairs = info.map((coord: any) => `${coord.x}, ${coord.y}`)
@@ -36,11 +36,13 @@ export default class CoordController {
             const duplicateId = equalId.filter((id: any, index: number) => equalId.indexOf(id) !== index)
             if (duplicateId.length > 0) {    
                 return res.status(422).json({
-                message: `Coordenadas duplicadas detectadas: (${duplicateId[0]})`
+                message: `Ids duplicados detectados: (${duplicateId[0]})`
                 })
             }
         }
-          const savedCoords = await Coord.insertMany(info)
+        // -----------------------------------------------------
+          const savedCoords = new Coord({ Coordinates: info })
+          await savedCoords.save()
           res.status(201).json(savedCoords)
     }catch(error) {
     console.error(error)
