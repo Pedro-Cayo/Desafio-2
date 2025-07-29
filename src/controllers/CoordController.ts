@@ -6,6 +6,7 @@ export default class CoordController {
     static coord: ExpressType = async (req: Request, res: Response) => {
     try {
           const info = req.body
+        
         // Validação se está enviando um Array de pontos
         if (!Array.isArray(info)) {
               return res.status(400).json({ message: 'Esperado um array de pontos.' })
@@ -50,13 +51,34 @@ export default class CoordController {
     }
   }
         static getCoordsById: ExpressType = async (req, res) => {
-          const id = req.params.id
-          const coord = await Coord.findById(id)
+        try {
+        const id = req.params.id
+        const coord = await Coord.findById(id)
 
-          if(!coord){
+        if(!coord){
           res.status(422).json({ message: 'Coordenadas não encontradas!',})
           return
+        }
+        res.status(200).json({coord}) 
+        } catch (error) {
+        
           }
-          res.status(200).json({coord})
+          
+        }
+        static patchCoords: ExpressType = async (req, res) => {
+        try {
+        const id = req.params.id
+        const info = req.body
+        const coord = await Coord.findById(id)
+
+        if(!coord){
+          res.status(422).json({ message: 'Coordenadas não encontradas!',})
+          return
+        }
+        res.status(200).json({coord}) 
+        } catch (error) {
+        
+          }
+          
         }
   }
