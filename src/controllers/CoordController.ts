@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import {Request, Response } from 'express'
 import Coord from '../models/Coord'
 import { ExpressType } from '../types/types'
 

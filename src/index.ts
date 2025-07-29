@@ -1,6 +1,7 @@
 //TypeScript Express
 import express, { Request, Response, NextFunction } from 'express'
 import CoordRoutes from './routes/CoordRoutes'
+import TrackRoutes from './routes/TrackRoutes'
 //-----------------------
 const app = express()
 
@@ -24,5 +25,6 @@ app.get('/', (req, res) => {
 
 //Routes
 app.use('/pontos', CoordRoutes)
+app.use('/tracks', TrackRoutes)
 
 app.listen(3000)

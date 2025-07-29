@@ -4,6 +4,7 @@ const {body, validationResult} = require('express-validator')
 
 const router = Router()
 
+router.get('/:id', CoordController.getCoordsById);
 router.post(
     '/',[
         body('*.id').notEmpty().isInt(),
@@ -19,9 +20,6 @@ router.post(
     ],
     CoordController.coord
 );
-
-router.get('/:id', CoordController.getCoordsById);
-
 router.patch('/:id', [
         body('*.id').notEmpty().isInt(),
         body('*.x').notEmpty().isNumeric(),
