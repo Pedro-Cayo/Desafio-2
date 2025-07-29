@@ -7,24 +7,8 @@ export default class CoordController {
     try {
           const info = req.body
         
-        // Validação se está enviando um Array de pontos
-        if (!Array.isArray(info)) {
-              return res.status(400).json({ message: 'Esperado um array de pontos.' })
-          }
-        // Validações de Valores Númericos
+        
         for(const coord of info){
-            if (typeof coord.x !== 'number' || isNaN(coord.x)) {
-                return res.status(422).json({ message: `Os valores de x devem ser númericos. O erro está no objeto de id ${coord.id}`})
-              }
-            if (typeof coord.y !== 'number' || isNaN(coord.y)) {
-               return res.status(422).json({ message: `Os valores de y devem ser númericos. O erro está no objeto de id ${coord.id}` })
-              }
-            if (typeof coord.id !== 'number' || isNaN(coord.id)) {
-              return res.status(422).json({ message: `Os valores do id devem ser númericos. O erro está no objeto de id ${coord.id}` })
-              }
-            if (!coord.x || !coord.y) {
-                return res.status(422).json({ message: `Todos os pontos devem possuir as coordenadas x e y. O erro está no objeto de id ${coord.id}` })
-              }
         // Validações de pares de coordenadas ou Id's iguais 
             const equalPairs = info.map((coord: any) => `${coord.x}, ${coord.y}`)
             const duplicatePairs = equalPairs.filter((pair: string, index: number) => equalPairs.indexOf(pair) !== index)
@@ -61,7 +45,7 @@ export default class CoordController {
         }
         res.status(200).json({coord}) 
         } catch (error) {
-        
+        res.status(500).json({ message: 'Erro ao obter as Coordenadas.' })
           }
           
         }
@@ -70,14 +54,15 @@ export default class CoordController {
         const id = req.params.id
         const info = req.body
         const coord = await Coord.findById(id)
+        const updatedData = [{}]
 
         if(!coord){
           res.status(422).json({ message: 'Coordenadas não encontradas!',})
           return
         }
-        res.status(200).json({coord}) 
-        } catch (error) {
         
+        } catch (error) {
+        res.status(500).json({ message: 'Erro ao obter as Coordenadas.' })
           }
           
         }

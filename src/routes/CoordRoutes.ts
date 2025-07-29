@@ -21,6 +21,19 @@ router.post(
 );
 
 router.get('/:id', CoordController.getCoordsById);
-router.patch('/:id', CoordController.patchCoords);
+router.patch('/:id', [
+        body('*.id').notEmpty().isInt(),
+        body('*.x').notEmpty().isNumeric(),
+        body('*.y').notEmpty().isNumeric(),
+        (req: Request, res: Response, next: NextFunction) => {
+            const errors: any = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+            next();
+        }
+    ],
+    CoordController.patchCoords
+);
 
 export default router
