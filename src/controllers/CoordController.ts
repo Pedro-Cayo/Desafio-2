@@ -49,4 +49,14 @@ export default class CoordController {
       res.status(500).json({ message: 'Erro ao salvar coordenadas.' })
     }
   }
-  }   
+        static getCoordsById: ExpressType = async (req, res) => {
+          const id = req.params.id
+          const coord = await Coord.findById(id)
+
+          if(!coord){
+          res.status(422).json({ message: 'Coordenadas não encontradas!',})
+          return
+          }
+          res.status(200).json({coord})
+        }
+  }
