@@ -6,8 +6,6 @@ export default class CoordController {
     static coord: ExpressType = async (req: Request, res: Response) => {
     try {
           const info = req.body
-        
-        
         for(const coord of info){
         // Validações de pares de coordenadas ou Id's iguais 
             const equalPairs = info.map((coord: any) => `${coord.x}, ${coord.y}`)
@@ -34,36 +32,73 @@ export default class CoordController {
       res.status(500).json({ message: 'Erro ao salvar coordenadas.' })
     }
   }
-        static getCoordsById: ExpressType = async (req, res) => {
-        try {
-        const id = req.params.id
-        const coord = await Coord.findById(id)
+    static getCoordsById: ExpressType = async (req, res) => {
+      try {
+      const id = req.params.id
+      const coord = await Coord.findById(id)
 
-        if(!coord){
-          res.status(422).json({ message: 'Coordenadas não encontradas!',})
-          return
+      if(!coord){
+        res.status(422).json({ message: 'Coordenadas não encontradas!',})
+        return
         }
-        res.status(200).json({coord}) 
-        } catch (error) {
-        res.status(500).json({ message: 'Erro ao obter as Coordenadas.' })
-          }
+      res.status(200).json({coord}) 
+      } catch (error) {
+          res.status(500).json({ message: 'Erro ao obter as Coordenadas.' })
+        }
           
         }
-        static patchCoords: ExpressType = async (req, res) => {
-        try {
-        const id = req.params.id
-        const info = req.body
-        const coord = await Coord.findById(id)
-        const updatedData = [{}]
-
-        if(!coord){
-          res.status(422).json({ message: 'Coordenadas não encontradas!',})
-          return
+      static patchCoords: ExpressType = async (req, res) => {
+      try {
+      const id = req.params.id
+      const info = req.body
+      const coord = await Coord.findById(id)
+      if(!coord){
+        res.status(422).json({ message: 'Coordenadas não encontradas!',})
+        return
+      }
+      // Verificação se as coordenadas colocadas em um id diferente, já existem em outro id.
+      const duplicatedCoords = coord.Coordinates
+      let hasChanges: boolean = false
+      for (const data of info) {
+        const duplicatedPairs = duplicatedCoords.find(
+          c => c.id !== data.id && c.x === data.x && c.y === data.y
+        )
+      if (duplicatedPairs) {
+        return res.status(400).json({
+          message: `Coordenadas (x: ${data.x}, y: ${data.y}) já estão em uso pelo ID ${duplicatedPairs.id}.`
+        })
+      }
+      const updatedData = coord.Coordinates.findIndex(c => c.id === data.id)
+        if(updatedData !== -1){
+          const updated = coord.Coordinates[updatedData]
+        if (updated.x !== data.x || updated.y !== data.y) {
+          coord.Coordinates[updatedData].x = data.x
+          coord.Coordinates[updatedData].y = data.y
+          hasChanges = true
         }
+        } else {
+        // Adicionando um objeto de pontos extra na array.
+          coord.Coordinates.push ({
+            id: data.id,
+            x: data.x,
+            y: data.y,
+          })
+        hasChanges = true
+          }
+      }
+      if (!hasChanges) {
+      return res.status(200).json({
+        message: 'Não houve nada para se atualizar. O id e as coordenadas são iguais.',
+      })
+    }
+      // Atualização dos pontos & Verificação se houve alterações
+      await coord.save()
+      res.status(200).json({message: `Coordenadas Atualizadas com Sucesso!`, coord: coord})
         
-        } catch (error) {
+      } catch (error) {
         res.status(500).json({ message: 'Erro ao obter as Coordenadas.' })
-          }
-          
+        console.error(error)
         }
+          
+      }
   }

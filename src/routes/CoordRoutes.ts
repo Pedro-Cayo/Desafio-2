@@ -21,6 +21,7 @@ router.post(
 );
 
 router.get('/:id', CoordController.getCoordsById);
+
 router.patch('/:id', [
         body('*.id').notEmpty().isInt(),
         body('*.x').notEmpty().isNumeric(),
