@@ -38,7 +38,8 @@ export default class TrackController {
             const formatedTracks: TrackHistory[] = tracks.map((track) =>{
                 const properties = track.OptimalTrack[0]
                 return{
-                    trackId: track._id.toString(),
+                    trackId: track.id,
+                    trackOrder: properties.order,
                     originalCoordsId: properties.id,
                     trackDate: track.createdAt as any,
                     totalDistance: properties.totalDistance,

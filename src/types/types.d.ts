@@ -10,6 +10,7 @@ export type BestTrack = {
 
 export type TrackHistory = {
   trackId: string,
+  trackOrder: string[],
   originalCoordsId: string,
   trackDate: Date,
   totalDistance: number
