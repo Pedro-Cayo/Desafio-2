@@ -46,8 +46,22 @@ export default class TrackController {
             })
             return res.status(200).json(formatedTracks)
         } catch (error) {
-            
+        console.error(error)
+        res.status(500).json({ message: 'Erro ao acessar o histórico.' })
         }
     }
-
+    static deleteTracks: ExpressType = async (req, res) => {
+        try {
+            const id = req.params.id
+            const mongoDbId = await Track.findById(id)
+            if(!id || !mongoDbId){
+            return res.status(404).json({message: `O Id desse conjunto de pontos não existe.}`})   
+            }
+            await Track.findByIdAndDelete(id)
+            res.status(200).json({message: `Track de Id: ${id} removido com sucesso!`})
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({ message: 'Erro ao deletar a Track do servidor.' })
+        }
+    }
 }

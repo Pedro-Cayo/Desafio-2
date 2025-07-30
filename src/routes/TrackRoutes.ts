@@ -4,8 +4,7 @@ import TrackController from '../controllers/TrackController'
 const router = Router()
 
 router.get('/history', TrackController.history);
-router.delete('/:id', TrackController.bestTrackById);
 router.get('/:id', TrackController.bestTrackById);
-
+router.delete('/:id', TrackController.deleteTracks);
 
 export default router
