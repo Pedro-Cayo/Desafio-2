@@ -12,14 +12,19 @@ export default class TrackController {
                 return res.status(404).json({ message: 'A coordenada não existe ou não há mais nenhuma coordenada para comparação.' })
             }
             const bestTrack = optimalTrack(coord.Coordinates);
-            await Track.create({
-            coordId: id,
+            const idDuplicate = await Track.findOne({'OptimalTrack.id': id})
+            if(idDuplicate){
+                return res.status(409).json({ message: 'Já existe uma rota com esse id.' })
+            }            
+            const newTrack = new Track({
+            OptimalTrack: [{
+            id: id,
             order: bestTrack.order,
             totalDistance: bestTrack.totalDistance,
-});
-            return res.status(200).json(bestTrack);
-
-return res.status(200).json(bestTrack);
+            }]
+             })
+            await newTrack.save()
+            return res.status(200).json(bestTrack)
             
         } catch (error) {
             console.error(error)
