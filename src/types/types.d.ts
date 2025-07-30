@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Date } from 'mongoose';
 export type ExpressType = (req: Request, res: Response, next: function()) => void
 export {Request, Response}
 
@@ -8,3 +9,10 @@ export type BestTrack = {
 };
 
 export type Locations = { id: number; x: number; y: number };
+
+export type TrackHistory = {
+  trackId: string,
+  originalCoordsId: string,
+  trackDate: Date,
+  totalDistance: number
+}
