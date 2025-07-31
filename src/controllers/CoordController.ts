@@ -11,10 +11,11 @@ export default class CoordController {
             const equalPairs = info.map((coord: any) => `${coord.x}, ${coord.y}`)
             const duplicatePairs = equalPairs.filter((pair: string, index: number) => equalPairs.indexOf(pair) !== index)
             if (duplicatePairs.length > 0) {    
-                return res.status(422).json({
+              return res.status(422).json({
                 message: `Coordenadas duplicadas detectadas: (${duplicatePairs[0]})`
-                })
+              })
             }
+        // Validação se ids duplicados
             const equalId = info.map((coord: any) => coord.id)
             const duplicateId = equalId.filter((id: any, index: number) => equalId.indexOf(id) !== index)
             if (duplicateId.length > 0) {    
@@ -23,7 +24,6 @@ export default class CoordController {
                 })
             }
         }
-        // -----------------------------------------------------
           const savedCoords = new Coord({ Coordinates: info })
           await savedCoords.save()
           res.status(201).json(savedCoords)
@@ -85,13 +85,13 @@ export default class CoordController {
           })
         hasChanges = true
           }
-      }
+        }
+        // Atualização dos pontos & Verificação se houve alterações
       if (!hasChanges) {
       return res.status(200).json({
         message: 'Não houve nada para se atualizar. O id e as coordenadas são iguais.',
       })
     }
-      // Atualização dos pontos & Verificação se houve alterações
       await coord.save()
       res.status(200).json({message: `Coordenadas Atualizadas com Sucesso!`, coord: coord})
         

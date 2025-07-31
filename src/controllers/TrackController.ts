@@ -7,11 +7,13 @@ import { format } from "date-fns";
 export default class TrackController {
     static bestTrackById: ExpressType = async (req, res) => {
         try {
+            // Validação sobre a existência e o tamanho.
             const id = req.params.id
             const coord = await Coord.findById(id)
             if (!coord || !coord.Coordinates || coord.Coordinates.length < 2) {
                 return res.status(404).json({ message: 'A coordenada não existe ou não há mais nenhuma coordenada para comparação.' })
             }
+            // Validação de rota duplicada.
             const bestTrack = optimalTrack(coord.Coordinates)
             const idDuplicate = await Track.findOne({'OptimalTrack.id': id})
             if(idDuplicate){
@@ -52,6 +54,7 @@ export default class TrackController {
         res.status(500).json({ message: 'Erro ao acessar o histórico.' })
         }
     }
+
     static deleteTracks: ExpressType = async (req, res) => {
         try {
             const id = req.params.id

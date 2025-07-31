@@ -1,6 +1,6 @@
 import {NextFunction, Router, Request, Response} from 'express'
 import CoordController from '../controllers/CoordController'
-const {body, validationResult} = require('express-validator')
+import {body, validationResult} from 'express-validator'
 
 const router = Router()
 

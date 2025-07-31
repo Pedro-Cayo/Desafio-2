@@ -13,9 +13,7 @@ export const arrayTransform = (distances: number[]) => {
 }
 
 export const optimalTrack = (coords: Locations[]): BestTrack => {
-    if (!coords || coords.length < 2) {
-    return { order: [], totalDistance: 0 }
-  }
+    
     const visitedOrder: number[] = []
     let totalDistance: number = 0
     let remaining: Locations[] = [...coords]
