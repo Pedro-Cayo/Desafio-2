@@ -2,6 +2,7 @@ import Coord from '../models/Coord'
 import { ExpressType, TrackHistory } from '../types/types'
 import {optimalTrack} from '../utils/calcFunctions'
 import Track from '../models/Tracks'
+import { format } from "date-fns";
 
 export default class TrackController {
     static bestTrackById: ExpressType = async (req, res) => {
@@ -41,7 +42,7 @@ export default class TrackController {
                     trackId: track.id,
                     trackOrder: properties.order,
                     originalCoordsId: properties.id,
-                    trackDate: track.createdAt as any,
+                    trackDate: format(new Date(track.createdAt as any), 'dd/MM/yyyy HH:mm'),
                     totalDistance: properties.totalDistance,
                 }
             })
