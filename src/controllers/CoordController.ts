@@ -6,8 +6,13 @@ export default class CoordController {
     static coord: ExpressType = async (req: Request, res: Response) => {
     try {
           const info = req.body
+          if (!info || !Array.isArray(info) || info.length < 2) {
+            return res.status(400).json({
+            message: 'É necessário fornecer ao menos dois pares de coordenadas'
+        })
+      }
         for(const coord of info){
-        // Validações de pares de coordenadas ou Id's iguais 
+        // Validações de pares de coordenadas
             const equalPairs = info.map((coord: any) => `${coord.x}, ${coord.y}`)
             const duplicatePairs = equalPairs.filter((pair: string, index: number) => equalPairs.indexOf(pair) !== index)
             if (duplicatePairs.length > 0) {    

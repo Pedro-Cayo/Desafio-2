@@ -10,8 +10,8 @@ export default class TrackController {
             // Validação sobre a existência e o tamanho.
             const id = req.params.id
             const coord = await Coord.findById(id)
-            if (!coord || !coord.Coordinates || coord.Coordinates.length < 2) {
-                return res.status(404).json({ message: 'A coordenada não existe ou não há mais nenhuma coordenada para comparação.' })
+            if (!coord || !coord.Coordinates) {
+                return res.status(404).json({ message: 'A coordenada não existe.' })
             }
             // Validação de rota duplicada.
             const bestTrack = optimalTrack(coord.Coordinates)
