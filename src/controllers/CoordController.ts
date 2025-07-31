@@ -6,6 +6,7 @@ export default class CoordController {
     static coord: ExpressType = async (req: Request, res: Response) => {
     try {
           const info = req.body
+        // Validação de existência e tamanho
           if (!info || !Array.isArray(info) || info.length < 2) {
             return res.status(400).json({
             message: 'É necessário fornecer ao menos dois pares de coordenadas'

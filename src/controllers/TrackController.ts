@@ -7,7 +7,7 @@ import { format } from "date-fns";
 export default class TrackController {
     static bestTrackById: ExpressType = async (req, res) => {
         try {
-            // Validação sobre a existência e o tamanho.
+            // Validação de existência
             const id = req.params.id
             const coord = await Coord.findById(id)
             if (!coord || !coord.Coordinates) {
@@ -31,7 +31,7 @@ export default class TrackController {
             
         } catch (error) {
             console.error(error)
-            return res.status(404).json({message: `Conjunto de pontos não encontrado.}`})
+            return res.status(404).json({message: `Conjunto de pontos não encontrado.`})
         }
     }
 
