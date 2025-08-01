@@ -61,18 +61,24 @@ export default class CoordController {
         res.status(422).json({ message: 'Coordenadas não encontradas!',})
         return
       }
-      // Verificação se as coordenadas colocadas em um id diferente, já existem em outro id.
-      const duplicatedCoords = coord.Coordinates
       let hasChanges: boolean = false
+      // Validação se ids duplicados
+      const equalId = info.map((coord: any) => coord.id)
+            const duplicateId = equalId.filter((id: any, index: number) => equalId.indexOf(id) !== index)
+            if (duplicateId.length > 0) {    
+                return res.status(422).json({
+                message: `Ids duplicados detectados: (${duplicateId[0]})`
+                })
+            }
+      // Validações de pares de coordenadas
+            const equalPairs = info.map((coord: any) => `${coord.x}, ${coord.y}`)
+            const duplicatePairs = equalPairs.filter((pair: string, index: number) => equalPairs.indexOf(pair) !== index)
+            if (duplicatePairs.length > 0) {    
+              return res.status(422).json({
+                message: `Coordenadas duplicadas detectadas: (${duplicatePairs[0]})`
+              })
+            }
       for (const data of info) {
-        const duplicatedPairs = duplicatedCoords.find(
-          c => c.id !== data.id && c.x === data.x && c.y === data.y
-        )
-      if (duplicatedPairs) {
-        return res.status(400).json({
-          message: `Coordenadas (x: ${data.x}, y: ${data.y}) já estão em uso pelo ID ${duplicatedPairs.id}.`
-        })
-      }
       const updatedData = coord.Coordinates.findIndex(c => c.id === data.id)
         if(updatedData !== -1){
           const updated = coord.Coordinates[updatedData]
