@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "83b0bc09-fae2-4b4a-bc68-9c3cc4005c38",
+		"name": "Otimização de Rotas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "46977513",
+		"_collection_link": "https://cryosat-astronomer-53255805-5269255.postman.co/workspace/Pedro-Cayo's-Workspace~611fa9cd-2e85-4b78-8020-531d44cca8e5/collection/46977513-83b0bc09-fae2-4b4a-bc68-9c3cc4005c38?action=share&source=collection_link&creator=46977513"
+	},
+	"item": [
+		{
+			"name": "Coord",
+			"item": [
+				{
+					"name": "Showing Coordinates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}pontos/:id",
+							"host": [
+								"{{URL}}pontos"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "688cb86659efc6e4da5ed07"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    [\r\n    {\"id\": 5, \"x\": 1, \"y\":1},\r\n    {\"id\": 6, \"x\": 1, \"y\":10},\r\n    {\"id\": 7, \"x\": 5, \"y\":12},\r\n    {\"id\": 8, \"x\": 8, \"y\":3},\r\n    {\"id\": 9, \"x\": 2, \"y\":8}\r\n    ]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}pontos/:id",
+							"host": [
+								"{{URL}}pontos"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "688cb86659efc6e4da5ed07e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Coordenadas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    [\r\n    {\"id\": 5, \"x\": 1, \"y\":1}\r\n    ]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{URL}}pontos"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tracks",
+			"item": [
+				{
+					"name": "Best Track",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}tracks/:id",
+							"host": [
+								"{{URL}}tracks"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "688bde7e8243db92bfb16dee"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Historic of Tracks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{URL}}tracks/history"
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting tracks",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}tracks/:id",
+							"host": [
+								"{{URL}}tracks"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "688be02e8243db92bfb16e45"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://localhost:3000/",
+			"type": "string"
+		}
+	]
+}
