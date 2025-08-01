@@ -30,8 +30,7 @@ export default class TrackController {
             return res.status(200).json(bestTrack)
             
         } catch (error) {
-            console.error(error)
-            return res.status(404).json({message: `Conjunto de pontos não encontrado.`})
+            return res.status(404).json({message: `Conjunto de pontos não encontrado. `})
         }
     }
 
@@ -50,7 +49,6 @@ export default class TrackController {
             })
             return res.status(200).json(formatedTracks)
         } catch (error) {
-        console.error(error)
         res.status(500).json({ message: 'Erro ao acessar o histórico.' })
         }
     }
@@ -65,7 +63,6 @@ export default class TrackController {
             await Track.findByIdAndDelete(id)
             res.status(200).json({message: `Track de Id: ${id} removido com sucesso!`})
         } catch (error) {
-            console.error(error)
             res.status(500).json({ message: 'Erro ao deletar a Track do servidor.' })
         }
     }

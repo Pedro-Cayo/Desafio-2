@@ -34,7 +34,6 @@ export default class CoordController {
           await savedCoords.save()
           res.status(201).json(savedCoords)
     }catch(error) {
-      console.error(error)
       res.status(500).json({ message: 'Erro ao salvar coordenadas.' })
     }
   }
@@ -102,7 +101,6 @@ export default class CoordController {
       res.status(200).json({message: `Coordenadas Atualizadas com Sucesso!`, coord: coord})
         
       } catch (error) {
-        console.error(error)
         res.status(500).json({ message: 'Erro ao obter as Coordenadas.' })
         }
           
