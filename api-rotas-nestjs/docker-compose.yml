@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  api-nestjs:
+    build: . 
+    container_name: api-rotas
+    ports:
+      - "3000:3000" 
+    environment:
+      MONGO_URI: mongodb://mongodb-container:27017/rotasdb
+    depends_on:
+      - mongodb-container
+
+  mongodb-container:
+    image: mongo:latest 
+    container_name: mongodb-rotas
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db 
+
+volumes:
+  mongo-data: 
