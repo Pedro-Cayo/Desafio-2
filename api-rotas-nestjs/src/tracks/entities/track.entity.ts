@@ -1,18 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Document } from 'mongoose';
 
-export type CoordDocument = HydratedDocument<Track>
+export type TrackDocument = Track & Document;
 
-@Schema({timestamps: true})
+@Schema({ timestamps: true })
 export class Track {
+  @Prop({ required: true })
+  pontosId: string;
 
-    @Prop({ required: true, type: String })
-    id: string
+  @Prop([String])
+  ordem: string[];
 
-    @Prop({ required: true, type: Number })
-    order: [string];
+  @Prop({ required: true })
+  distanciaTotal: number;
 
-    @Prop({ required: true, type: Number })
-    totalDistance: number; 
+  @Prop({ default: Date.now })
+  dataCalculo: Date;
 }
-export const TrackSchema = SchemaFactory.createForClass(Track)
+export const TrackSchema = SchemaFactory.createForClass(Track);

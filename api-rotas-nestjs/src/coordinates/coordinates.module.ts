@@ -10,5 +10,6 @@ import {Coordinate, CoordinateSchema} from './entities/coordinate.entity'
   ],
   controllers: [CoordinatesController],
   providers: [CoordinatesService],
+  exports: [CoordinatesService, MongooseModule]
 })
 export class CoordinatesModule {}

@@ -1,17 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Document } from 'mongoose';
 
-export type CoordDocument = HydratedDocument<Coordinate>
+export type CoordinateDocument = Coordinate & Document;
 
 @Schema({timestamps: true})
 export class Coordinate {
-    @Prop({ required: true, type: String })
-    id: string
-
-    @Prop({ required: true, type: Number })
+    @Prop([{
+    id: { type: Number, required: true },
+    x: { type: Number, required: true },
+    y: { type: Number, required: true }
+  }])
+  pontos: Array<{
+    id: string;
     x: number;
+    y: number;
+  }>;
 
-    @Prop({ required: true, type: Number })
-    y: number; 
+  createdAt?: Date;
+  updatedAt?: Date;
 }
-export const CoordinateSchema = SchemaFactory.createForClass(Coordinate)
+
+export const CoordinateSchema = SchemaFactory.createForClass(Coordinate);
