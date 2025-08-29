@@ -4,11 +4,3 @@ export type BestTrack = {
   order: (string | number)[];
   totalDistance: number;
 };
-
-export type TrackHistory = {
-  trackId: any,
-  trackOrder: string[],
-  originalCoordsId: string,
-  trackDate: string,
-  totalDistance: number
-}

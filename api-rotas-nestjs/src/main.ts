@@ -16,6 +16,7 @@ async function bootstrap() {
     .setTitle('Rotas de Entrega')
     .setDescription('API de otimização de rotas de entrega')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

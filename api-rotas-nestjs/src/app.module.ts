@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,9 +20,12 @@ import { TracksModule } from './tracks/tracks.module';
       }),
       inject: [ConfigService],
     }),
+    ThrottlerModule.forRoot([{
+      ttl: 60000, 
+      limit: 100, 
+    }]),
     CoordinatesModule,
     TracksModule,
-
   ],
   controllers: [AppController],
   providers: [AppService],

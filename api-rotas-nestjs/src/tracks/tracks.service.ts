@@ -3,8 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Track, TrackDocument } from './entities/track.entity';
 import { Coordinate, CoordinateDocument } from '../coordinates/entities/coordinate.entity';
-import {Locations, TrackHistory} from '../types/types'
+import {Locations} from '../types/types'
 import {optimalTrack} from '../utils/calcFunctions'
+import { GetHistoryResponseDto } from './dto/get-history-response.dto';
 
 @Injectable()
 export class TracksService {
@@ -13,7 +14,7 @@ export class TracksService {
     @InjectModel(Coordinate.name) private coordinateModel: Model<CoordinateDocument>,
   ) {}
 
-  async calculateTrack(pontosId: string) {
+  async calculateTrack(pontosId: string): Promise<any> {
     const coordinate = await this.coordinateModel.findById(pontosId);
     if (!coordinate) {
       throw new NotFoundException('Conjunto de pontos não encontrado');
@@ -40,7 +41,7 @@ export class TracksService {
 
     const savedTrack = await track.save();
 
-    const history: TrackHistory = {
+    const history = {
     trackId: savedTrack._id,
     trackOrder: savedTrack.ordem,
     originalCoordsId: savedTrack.pontosId,
@@ -51,7 +52,7 @@ export class TracksService {
     return history;
   }
 
-  async getHistory(limit?: number, offset?: number): Promise<TrackHistory[]> {
+  async getHistory(limit?: number, offset?: number): Promise<GetHistoryResponseDto> {
     const query = this.trackModel.find()
       .sort({ dataCalculo: -1 });
 
@@ -64,14 +65,18 @@ export class TracksService {
     }
 
     const tracks = await query.exec();
+    const total = await this.trackModel.countDocuments();
 
-    return tracks.map(track => ({
-    trackId: track._id,
-    trackOrder: track.ordem,
-    originalCoordsId: track.pontosId,
-    trackDate: track.dataCalculo.toISOString(),
-    totalDistance: track.distanciaTotal
-    }));
+    return {
+        history: tracks.map(track => ({
+        trackId: (track._id as any).toString,
+        trackOrder: track.ordem.map((id: any) => Number(id)),
+        originalCoordsId: track.pontosId,
+        trackDate: track.dataCalculo.toISOString(),
+        totalDistance: track.distanciaTotal
+      })),
+      total,
+    };
   }
 
   async deleteTrack(id: string) {

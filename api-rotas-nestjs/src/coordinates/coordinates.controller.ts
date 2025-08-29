@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse} from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth} from '@nestjs/swagger';
 import { CoordinatesService } from './coordinates.service';
 import { CreateCoordinateDto } from './dto/create-coordinate.dto';
 import { UpdateCoordinateDto } from './dto/update-coordinate.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('coordinates')
 @Controller('coordinates')
@@ -10,6 +11,8 @@ export class CoordinatesController {
   constructor(private readonly coordinatesService: CoordinatesService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Criação de coordenadas de pontos de entrega' })
   @ApiResponse({ status: 201, description: 'Coordenadas criadas com sucesso' })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
@@ -27,6 +30,8 @@ export class CoordinatesController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Atualizar ou adicionar coordenadas ao conjunto de pontos existente' })
   @ApiResponse({ status: 200, description: 'Pontos atualizados com sucesso' })
   @ApiResponse({ status: 404, description: 'Conjunto de pontos não encontrado' })
