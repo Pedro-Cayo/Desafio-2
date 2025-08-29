@@ -1,12 +1,12 @@
 import { Type } from 'class-transformer';
 import { IsArray, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { PontoDeEntregaDto } from './create-coordinate.dto';
+import { DeliveryPointsDto } from './create-coordinate.dto';
 
 export class UpdateCoordinateDto {
     @ApiProperty({ 
         description: 'Array de pontos de entrega para atualizar ou adicionar',
-        type: [PontoDeEntregaDto],
+        type: [DeliveryPointsDto],
         example: [
             { id: 1, x: 12, y: 22 },
             { id: 3, x: 18, y: 30 }
@@ -14,6 +14,6 @@ export class UpdateCoordinateDto {
     })
     @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => PontoDeEntregaDto)
-    pontos: PontoDeEntregaDto[];
+    @Type(() => DeliveryPointsDto)
+    pontos: DeliveryPointsDto[];
 }

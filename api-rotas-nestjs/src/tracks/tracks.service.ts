@@ -1,26 +1,89 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTrackDto } from './dto/create-track.dto';
-import { UpdateTrackDto } from './dto/update-track.dto';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Track, TrackDocument } from './entities/track.entity';
+import { Coordinate, CoordinateDocument } from '../coordinates/entities/coordinate.entity';
+import {Locations, TrackHistory} from '../types/types'
+import {optimalTrack} from '../utils/calcFunctions'
 
 @Injectable()
 export class TracksService {
-  create(createTrackDto: CreateTrackDto) {
-    return 'This action adds a new track';
+  constructor(
+    @InjectModel(Track.name) private trackModel: Model<TrackDocument>,
+    @InjectModel(Coordinate.name) private coordinateModel: Model<CoordinateDocument>,
+  ) {}
+
+  async calculateTrack(pontosId: string) {
+    const coordinate = await this.coordinateModel.findById(pontosId);
+    if (!coordinate) {
+      throw new NotFoundException('Conjunto de pontos não encontrado');
+    }
+
+    const existingTrack = await this.trackModel.findOne({ pontosId });
+    if (existingTrack) {
+      throw new ConflictException('Já existe uma rota calculada para este conjunto de pontos');
+    }
+    const pontos: Locations[] = coordinate.pontos.map((p: any, index: number) => ({
+    id: p.id ?? index,  
+    x: p.x,
+    y: p.y,
+    }));
+    
+    const rotaOtimizada = optimalTrack(pontos)
+
+    const track = new this.trackModel({
+      pontosId,
+      ordem: rotaOtimizada.order,
+      distanciaTotal: rotaOtimizada.totalDistance,
+      dataCalculo: new Date()
+    });
+
+    const savedTrack = await track.save();
+
+    const history: TrackHistory = {
+    trackId: savedTrack._id,
+    trackOrder: savedTrack.ordem,
+    originalCoordsId: savedTrack.pontosId,
+    trackDate: savedTrack.dataCalculo.toISOString(),
+    totalDistance: savedTrack.distanciaTotal
+  };
+
+    return history;
   }
 
-  findAll() {
-    return `This action returns all tracks`;
+  async getHistory(limit?: number, offset?: number): Promise<TrackHistory[]> {
+    const query = this.trackModel.find()
+      .sort({ dataCalculo: -1 });
+
+    if (offset) {
+      query.skip(Number(offset));
+    }
+
+    if (limit) {
+      query.limit(Number(limit));
+    }
+
+    const tracks = await query.exec();
+
+    return tracks.map(track => ({
+    trackId: track._id,
+    trackOrder: track.ordem,
+    originalCoordsId: track.pontosId,
+    trackDate: track.dataCalculo.toISOString(),
+    totalDistance: track.distanciaTotal
+    }));
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
-  }
+  async deleteTrack(id: string) {
+    const track = await this.trackModel.findById(id);
+    if (!track) {
+      throw new NotFoundException('Rota não encontrada');
+    }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} track`;
+    await this.trackModel.findByIdAndDelete(id);
+    
+    return {
+      message: 'Rota deletada com sucesso'
+    };
   }
 }

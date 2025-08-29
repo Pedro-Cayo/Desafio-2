@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumber, IsString, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class PontoDeEntregaDto {
+export class DeliveryPointsDto {
     @ApiProperty({ description: 'Identificador único do ponto', example: 1 })
     @IsNumber()
     @IsNotEmpty()
@@ -20,7 +20,7 @@ export class PontoDeEntregaDto {
 export class CreateCoordinateDto {
     @ApiProperty({ 
         description: 'Array de pontos de entrega',
-        type: [PontoDeEntregaDto],
+        type: [DeliveryPointsDto],
         example: [
             { id: 1, x: 10, y: 20 },
             { id: 2, x: 15, y: 25 }
@@ -28,6 +28,6 @@ export class CreateCoordinateDto {
     })
     @IsArray()
     @ValidateNested({ each: true })
-    @Type(() => PontoDeEntregaDto)
-    pontos: PontoDeEntregaDto[];
+    @Type(() => DeliveryPointsDto)
+    pontos: DeliveryPointsDto[];
 }
