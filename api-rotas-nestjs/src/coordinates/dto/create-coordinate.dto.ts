@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class PontoDeEntregaDto {
     @ApiProperty({ description: 'Identificador único do ponto', example: 1 })
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
     id: number;
 
