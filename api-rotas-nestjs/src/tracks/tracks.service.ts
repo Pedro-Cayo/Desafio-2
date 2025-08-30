@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Track, TrackDocument } from './entities/track.entity';
 import { Coordinate, CoordinateDocument } from '../coordinates/entities/coordinate.entity';
-import {Locations} from '../types/types'
-import {optimalTrack} from '../utils/calcFunctions'
+import { Locations } from '../types/types';
+import { optimalTrack } from '../utils/calcFunctions';
 import { GetHistoryResponseDto } from './dto/get-history-response.dto';
 
 @Injectable()
@@ -25,29 +25,27 @@ export class TracksService {
       throw new ConflictException('Já existe uma rota calculada para este conjunto de pontos');
     }
     const pontos: Locations[] = coordinate.pontos.map((p: any, index: number) => ({
-    id: p.id ?? index,  
-    x: p.x,
-    y: p.y,
+      id: p.id ?? index,  
+      x: p.x,
+      y: p.y,
     }));
     
-    const rotaOtimizada = optimalTrack(pontos)
+    const rotaOtimizada = optimalTrack(pontos);
 
-    const track = new this.trackModel({
+    const savedTrack = await this.trackModel.create({
       pontosId,
       ordem: rotaOtimizada.order,
       distanciaTotal: rotaOtimizada.totalDistance,
       dataCalculo: new Date()
     });
 
-    const savedTrack = await track.save();
-
     const result = {
-    trackId: savedTrack._id,
-    trackOrder: savedTrack.ordem,
-    originalCoordsId: savedTrack.pontosId,
-    trackDate: savedTrack.dataCalculo.toISOString(),
-    totalDistance: savedTrack.distanciaTotal
-  };
+      trackId: savedTrack._id,
+      trackOrder: savedTrack.ordem,
+      originalCoordsId: savedTrack.pontosId,
+      trackDate: savedTrack.dataCalculo.toISOString(),
+      totalDistance: savedTrack.distanciaTotal
+    };
 
     return result;
   }
@@ -68,7 +66,7 @@ export class TracksService {
     const total = await this.trackModel.countDocuments();
 
     return {
-        history: tracks.map(track => ({
+      history: tracks.map(track => ({
         trackId: (track._id as any).toString,
         trackOrder: track.ordem.map((id: any) => Number(id)),
         originalCoordsId: track.pontosId,

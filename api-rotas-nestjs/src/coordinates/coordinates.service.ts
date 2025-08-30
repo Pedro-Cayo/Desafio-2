@@ -23,13 +23,12 @@ export class CoordinatesService {
       throw new BadRequestException('IDs dos pontos devem ser únicos');
     }
 
-    const coordinate = new this.coordinateModel({ pontos });
-    const saved = await coordinate.save();
+    const createdCoordinate = await this.coordinateModel.create({ pontos });
     
     return {
-      id: saved._id,
-      pontos: saved.pontos,
-      createdAt: saved.createdAt
+      id: createdCoordinate._id,
+      pontos: createdCoordinate.pontos,
+      createdAt: createdCoordinate.createdAt
     };
   }
 
