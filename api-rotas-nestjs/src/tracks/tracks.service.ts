@@ -10,8 +10,8 @@ import { GetHistoryResponseDto } from './dto/get-history-response.dto';
 @Injectable()
 export class TracksService {
   constructor(
-    @InjectModel(Track.name) private trackModel: Model<TrackDocument>,
-    @InjectModel(Coordinate.name) private coordinateModel: Model<CoordinateDocument>,
+    @InjectModel(Track.name) public trackModel: Model<TrackDocument>,
+    @InjectModel(Coordinate.name) public coordinateModel: Model<CoordinateDocument>,
   ) {}
 
   async calculateTrack(pontosId: string): Promise<any> {
@@ -41,7 +41,7 @@ export class TracksService {
 
     const savedTrack = await track.save();
 
-    const history = {
+    const result = {
     trackId: savedTrack._id,
     trackOrder: savedTrack.ordem,
     originalCoordsId: savedTrack.pontosId,
@@ -49,7 +49,7 @@ export class TracksService {
     totalDistance: savedTrack.distanciaTotal
   };
 
-    return history;
+    return result;
   }
 
   async getHistory(limit?: number, offset?: number): Promise<GetHistoryResponseDto> {

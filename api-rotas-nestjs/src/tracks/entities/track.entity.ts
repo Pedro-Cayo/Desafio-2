@@ -5,16 +5,16 @@ export type TrackDocument = Track & Document;
 
 @Schema({ timestamps: true })
 export class Track {
-  @Prop({ required: true })
-  pontosId: string;
+  @Prop({ type: [String], required: true })
+pontosId: string;
 
-  @Prop([String])
+  @Prop({ type: [String], required: true })
   ordem: string[];
 
-  @Prop({ required: true })
+  @Prop({ type: Number, required: true })
   distanciaTotal: number;
 
-  @Prop({ default: Date.now })
+  @Prop({ type: Date, default: Date.now })
   dataCalculo: Date;
 }
 export const TrackSchema = SchemaFactory.createForClass(Track);
