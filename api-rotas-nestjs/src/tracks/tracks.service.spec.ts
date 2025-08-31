@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TracksService } from './tracks.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { Track } from './entities/track.entity';
-import { Coordinate } from '../coordinates/entities/coordinate.entity';
+import { Track } from './schema/track.schema';
+import { Coordinate } from '../coordinates/schema/coordinate.schema';
 import { Model } from 'mongoose';
 
 describe('TracksService', () => {

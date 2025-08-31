@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateCoordinateDto } from './dto/create-coordinate.dto';
 import { UpdateCoordinateDto } from './dto/update-coordinate.dto';
-import { Coordinate, CoordinateDocument } from './entities/coordinate.entity';
+import { Coordinate, CoordinateDocument } from './schema/coordinate.schema';
 
 @Injectable()
 export class CoordinatesService {

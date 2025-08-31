@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TracksService } from './tracks.service';
 import { TracksController } from './tracks.controller';
-import { Track, TrackSchema } from './entities/track.entity';
+import { Track, TrackSchema } from './schema/track.schema';
 import { CoordinatesModule } from '../coordinates/coordinates.module';
 
 @Module({

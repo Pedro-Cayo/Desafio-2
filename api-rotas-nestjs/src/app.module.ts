@@ -12,6 +12,7 @@ import { TracksModule } from './tracks/tracks.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

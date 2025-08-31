@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import {MongooseModule} from '@nestjs/mongoose'
 import { CoordinatesService } from './coordinates.service';
 import { CoordinatesController } from './coordinates.controller';
-import {Coordinate, CoordinateSchema} from './entities/coordinate.entity'
+import {Coordinate, CoordinateSchema} from './schema/coordinate.schema'
 
 @Module({
   imports: [

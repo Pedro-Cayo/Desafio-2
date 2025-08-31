@@ -6,7 +6,7 @@ export type TrackDocument = Track & Document;
 @Schema({ timestamps: true })
 export class Track {
   @Prop({ type: [String], required: true })
-pontosId: string;
+  pontosId: string;
 
   @Prop({ type: [String], required: true })
   ordem: string[];

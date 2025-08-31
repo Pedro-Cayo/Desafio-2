@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CoordinatesService } from './coordinates.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { Coordinate } from './entities/coordinate.entity';
+import { Coordinate } from './schema/coordinate.schema';
 import { CreateCoordinateDto } from './dto/create-coordinate.dto';
 import { UpdateCoordinateDto } from './dto/update-coordinate.dto';
 import { Model } from 'mongoose';

@@ -1,8 +1,8 @@
-import { Controller, Get, Param, Delete, UseGuards, Query, ValidationPipe} from '@nestjs/common';
+import { Controller, Get, Param, Delete, UseGuards, HttpCode, HttpStatus ,Query, ValidationPipe} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiBearerAuth} from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { GetHistoryRequestDto } from './dto/get-history-request.dto';
-import { GetHistoryResponseDto, TrackHistoryDto } from './dto/get-history-response.dto';
+import { GetHistoryResponseDto } from './dto/get-history-response.dto';
 import { TracksService } from './tracks.service';
 import { AuthGuard } from '../auth/auth.guard';
 
@@ -43,6 +43,7 @@ export class TracksController {
   @Delete(':id')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Deletar rota calculada' })
   @ApiResponse({ status: 204, description: 'Rota deletada com sucesso' })
   @ApiResponse({ status: 404, description: 'Rota não encontrada' })

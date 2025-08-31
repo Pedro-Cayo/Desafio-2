@@ -3,9 +3,9 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { AuthGuard } from '../src/auth/auth.guard';
-import { MongooseModule } from '@nestjs/mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MockAuthGuard } from '../src/auth/mock-auth.guard';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import { ConfigService } from '@nestjs/config';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -20,16 +20,15 @@ describe('AppController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
+      .overrideProvider(ConfigService)
+      .useValue(new ConfigService({
+          DATABASE_URL: mongoUri,
+          VALID_API_KEYS: 'chave-para-testes-e2e',
+          THROTTLE_TTL: 1,
+          THROTTLE_LIMIT: 999,
+      }))
       .overrideGuard(AuthGuard)
       .useClass(MockAuthGuard)
-      .overrideModule(MongooseModule)
-      .useModule(
-        MongooseModule.forRootAsync({
-          useFactory: () => ({
-            uri: mongoUri,
-          }),
-        }),
-      )
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -138,7 +137,7 @@ describe('AppController (e2e)', () => {
       
       await request(app.getHttpServer())
         .delete(`/tracks/${trackId}`)
-        .expect(200);
+        .expect(204); 
         
       const historyAfterDelete = await request(app.getHttpServer())
         .get('/tracks/history')

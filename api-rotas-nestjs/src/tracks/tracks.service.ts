@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Track, TrackDocument } from './entities/track.entity';
-import { Coordinate, CoordinateDocument } from '../coordinates/entities/coordinate.entity';
+import { Track, TrackDocument } from './schema/track.schema';
+import { Coordinate, CoordinateDocument } from '../coordinates/schema/coordinate.schema';
 import { Locations } from '../types/types';
 import { optimalTrack } from '../utils/calcFunctions';
 import { GetHistoryResponseDto } from './dto/get-history-response.dto';
