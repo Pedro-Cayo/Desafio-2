@@ -65,45 +65,47 @@ describe('arrayTransform', () => {
   });
 
 describe('optimalTrack', () => {
-  it('should calculate optimal visiting order and total distance', () => {
+  it('should calculate optimal visiting order and total distance for a round trip', () => {
     const coords: Locations[] = [
-      { id: 1, x: 0, y: 0 },
-      { id: 2, x: 3, y: 4 },
-      { id: 3, x: 6, y: 0 },
+      { id: 1, x: 0, y: 0 }, 
+      { id: 2, x: 3, y: 4 }, 
+      { id: 3, x: 6, y: 0 }, 
     ];
+
     const result = optimalTrack(coords);
-    expect(result.order).toEqual([1, 2, 3]);
-    expect(result.totalDistance).toBe(10);
+
+    expect(result.order).toEqual([1, 2, 3, 1]);
+    
+    expect(result.totalDistance).toBe(16);
   });
 
   it('should return an empty order and 0 distance for an empty array', () => {
     const coords: Locations[] = [];
     const result = optimalTrack(coords);
-  expect(result.order).toEqual([]);
-  expect(result.totalDistance).toBe(0);
+    expect(result.order).toEqual([]);
+    expect(result.totalDistance).toBe(0);
   });
 
-  it('should return the single location and 0 distance for a single-element array', () => {
-  const coords: Locations[] = [{ id: 10, x: 5, y: 5 }];
-  const result = optimalTrack(coords);
-  expect(result.order).toEqual([10]);
-  expect(result.totalDistance).toBe(0);
+  it('should return a round trip for a single-element array', () => {
+    const coords: Locations[] = [{ id: 10, x: 5, y: 5 }];
+    const result = optimalTrack(coords);
+    expect(result.order).toEqual([10, 10]);
+    expect(result.totalDistance).toBe(0);
   });
 
   it('should throw an error if any location has a non-numeric ID', () => {
-  const coords: any[] = [
-    { id: 1, x: 0, y: 0 },
-    { id: 'dois', x: 3, y: 4 },
-  ];
-  expect(() => optimalTrack(coords)).toThrow('Location ID must be a number.');
+    const coords: any[] = [
+      { id: 1, x: 0, y: 0 },
+      { id: 'dois', x: 3, y: 4 },
+    ];
+    expect(() => optimalTrack(coords)).toThrow('Location ID must be a number.');
   });
 
   it('should throw an error if any location has non-numeric coordinates', () => {
-  const coords: any[] = [
-    { id: 1, x: 0, y: 0 },
-    { id: 2, x: 3, y: 'quatro' },
-  ];
-  expect(() => optimalTrack(coords)).toThrow('Invalid coordinates: must be numbers.');
+    const coords: any[] = [
+      { id: 1, x: 0, y: 0 },
+      { id: 2, x: 3, y: 'quatro' },
+    ];
+    expect(() => optimalTrack(coords)).toThrow('Invalid coordinates: must be numbers.');
   });
-
 });

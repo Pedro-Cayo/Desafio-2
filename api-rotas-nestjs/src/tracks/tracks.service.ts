@@ -19,7 +19,7 @@ export class TracksService {
     if (!coordinate) {
       throw new NotFoundException('Conjunto de pontos não encontrado');
     }
-
+    
     const existingTrack = await this.trackModel.findOne({ pontosId });
     if (existingTrack) {
       throw new ConflictException('Já existe uma rota calculada para este conjunto de pontos');
@@ -67,7 +67,7 @@ export class TracksService {
 
     return {
       history: tracks.map(track => ({
-        trackId: (track._id as any).toString,
+        trackId: (track._id as any).toString(),
         trackOrder: track.ordem.map((id: any) => Number(id)),
         originalCoordsId: track.pontosId,
         trackDate: track.dataCalculo.toISOString(),

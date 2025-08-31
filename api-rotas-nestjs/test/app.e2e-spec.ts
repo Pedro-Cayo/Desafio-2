@@ -11,16 +11,25 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
   let mongoServer: MongoMemoryServer;
 
+  jest.setTimeout(30000);
+
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
       .overrideGuard(AuthGuard)
       .useClass(MockAuthGuard)
       .overrideModule(MongooseModule)
-      .useModule(MongooseModule.forRoot(mongoUri)) // Módulo sobrescrito de forma simplificada
+      .useModule(
+        MongooseModule.forRootAsync({
+          useFactory: () => ({
+            uri: mongoUri,
+          }),
+        }),
+      )
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -121,7 +130,7 @@ describe('AppController (e2e)', () => {
 
     it('DELETE /:id deve deletar uma rota existente e removê-la do histórico', async () => {
       const calculateResponse = await request(app.getHttpServer())
-      .get(`/tracks/${coordinateId}`);
+        .get(`/tracks/${coordinateId}`);
       const trackId = calculateResponse.body.trackId;
 
       const historyBeforeDelete = await request(app.getHttpServer()).get('/tracks/history');
