@@ -1,8 +1,10 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  constructor(private configService: ConfigService) {}
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -13,7 +15,9 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Token de acesso requerido');
     }
 
-    const validTokens = ['api-key1', 'token2'];
+    const apiKeysString = this.configService.get<string>('VALID_API_KEYS')
+    const validTokens = apiKeysString ? apiKeysString.split(',') : [];
+    const valideTokens = [];
     
     if (!validTokens.includes(token)) {
       throw new UnauthorizedException('Token inválido');

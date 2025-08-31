@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nestjs-api-deployment
+  labels:
+    app: nestjs-api
+spec:
+  replicas: 2 
+  selector:
+    matchLabels:
+      app: nestjs-api-rotas
+  template:
+    metadata:
+      labels:
+        app: nestjs-api-rotas
+    spec:
+      containers:
+      - name: nestjs-api-rotas-container
+        image: pedrocayo/api-rotas-nestjs-api:latest 
+        ports:
+        - containerPort: 3000 
+        env:
+        - name: DATABASE_URL
+          value: "mongodb+srv://compass-user:otimizacaoDeRotas@cluster-rotas-otimizada.700nc0n.mongodb.net/?retryWrites=true&w=majority&appName=cluster-rotas-otimizadas"

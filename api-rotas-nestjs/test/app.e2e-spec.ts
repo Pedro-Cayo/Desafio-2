@@ -5,13 +5,7 @@ import { AppModule } from './../src/app.module';
 import { AuthGuard } from '../src/auth/auth.guard';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { JwtService } from '@nestjs/jwt';
-
-class MockAuthGuard {
-  canActivate() {
-    return true;
-  }
-}
+import { MockAuthGuard } from '../src/auth/mock-auth.guard';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -25,15 +19,8 @@ describe('AppController (e2e)', () => {
     })
       .overrideGuard(AuthGuard)
       .useClass(MockAuthGuard)
-      .overrideModule(MongooseModule) 
-      .useModule({
-        module: MongooseModule,
-        imports: [
-          MongooseModule.forRoot(mongoUri),
-        ],
-        providers: [JwtService], // Adiciona JwtService para evitar erros de dependência
-        exports: [MongooseModule],
-      })
+      .overrideModule(MongooseModule)
+      .useModule(MongooseModule.forRoot(mongoUri)) // Módulo sobrescrito de forma simplificada
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -132,18 +119,26 @@ describe('AppController (e2e)', () => {
       expect(response.body.history.length).toBeGreaterThan(0);
     });
 
-    it('DELETE /:id deve deletar uma rota existente', async () => {
+    it('DELETE /:id deve deletar uma rota existente e removê-la do histórico', async () => {
       const calculateResponse = await request(app.getHttpServer())
-        .get(`/tracks/${coordinateId}`);
+      .get(`/tracks/${coordinateId}`);
       const trackId = calculateResponse.body.trackId;
+
+      const historyBeforeDelete = await request(app.getHttpServer()).get('/tracks/history');
+      expect(historyBeforeDelete.body.history.some(track => track.trackId === trackId)).toBe(true);
       
       await request(app.getHttpServer())
         .delete(`/tracks/${trackId}`)
         .expect(200);
         
-      await request(app.getHttpServer())
-        .get(`/tracks/${trackId}`)
-        .expect(404);
+      const historyAfterDelete = await request(app.getHttpServer())
+        .get('/tracks/history')
+        .expect(200);
+      
+      const historyList = historyAfterDelete.body.history;
+      const deletedTrack = historyList.find(track => track.trackId === trackId);
+      
+      expect(deletedTrack).toBeUndefined();
     });
   });
 });

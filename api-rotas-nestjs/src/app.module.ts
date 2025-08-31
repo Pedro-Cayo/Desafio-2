@@ -14,16 +14,20 @@ import { TracksModule } from './tracks/tracks.module';
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule], 
-      useFactory: async (ConfigService: ConfigService) => ({
-        uri: ConfigService.get<string>('MONGO_URI'),
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+      uri: configService.get<string>('DATABASE_URL'),
       }),
-      inject: [ConfigService],
+    inject: [ConfigService],
     }),
-    ThrottlerModule.forRoot([{
-      ttl: 60000, 
-      limit: 100, 
-    }]),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ([{
+        ttl: +configService.get<number>('THROTTLE_TTL', 60),
+        limit: +configService.get<number>('THROTTLE_LIMIT', 100),
+      }]),
+    }),
     CoordinatesModule,
     TracksModule,
   ],
