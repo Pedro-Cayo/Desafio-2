@@ -6,6 +6,8 @@ services:
     container_name: nestjs_api_otm
     ports:
       - "3000:3000"
+    env_file:
+      - ./.env
     environment:
       DATABASE_URL: mongodb://root:otimizacaoderotas@mongodb:27017/otimizacaoDeRotas?authSource=admin
     depends_on:

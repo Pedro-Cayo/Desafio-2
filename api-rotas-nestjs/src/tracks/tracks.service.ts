@@ -44,7 +44,7 @@ export class TracksService {
       trackOrder: savedTrack.ordem,
       originalCoordsId: savedTrack.pontosId,
       trackDate: savedTrack.dataCalculo.toISOString(),
-      totalDistance: savedTrack.distanciaTotal
+      totalDistance: parseFloat(savedTrack.distanciaTotal.toFixed(2))
     };
 
     return result;
@@ -71,7 +71,7 @@ export class TracksService {
         trackOrder: track.ordem.map((id: any) => Number(id)),
         originalCoordsId: track.pontosId,
         trackDate: track.dataCalculo.toISOString(),
-        totalDistance: track.distanciaTotal
+        totalDistance: parseFloat(track.distanciaTotal.toFixed(2))
       })),
       total,
     };

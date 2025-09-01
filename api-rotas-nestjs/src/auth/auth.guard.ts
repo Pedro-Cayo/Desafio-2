@@ -17,7 +17,6 @@ export class AuthGuard implements CanActivate {
 
     const apiKeysString = this.configService.get<string>('VALID_API_KEYS')
     const validTokens = apiKeysString ? apiKeysString.split(',') : [];
-    const valideTokens = [];
     
     if (!validTokens.includes(token)) {
       throw new UnauthorizedException('Token inválido');
